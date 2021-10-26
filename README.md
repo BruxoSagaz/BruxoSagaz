@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @BruxoSagaz, my real name is Gabriel
+- 👋 Hi, I’m @Bruxo, my real name is Gabriel
 - 👀 I'm interested in growing up my knowledge
 - 🌱 I’m currently learning Python
 - 💞️ I’m looking to be a great programmer
