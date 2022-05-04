@@ -1,5 +1,5 @@
 - 👋 Hi, I’m @Bruxo, my real name is Gabriel
-- 👀 I'm interested in growing up my knowledge
+- 👀 I'm interested growing up my knowledge
 - 🌱 I’m currently learning Web Development
 - 💞️ I’m looking to be a great programmer
 - 📫 How to reach me:
