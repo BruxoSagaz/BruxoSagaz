@@ -1,0 +1,16 @@
+{
+  "name": "meu-addon-stremio",
+  "version": "1.0.0",
+  "description": "Addon para Stremio",
+  "main": "Loucura", 
+  "dependencies": {
+    "stremio-addon-sdk": "^2.0.0",
+    "axios": "^0.21.1" 
+  },
+  "scripts": {
+    "start": "node Loucura"
+  },
+  "author": "Rafael",
+  "license": "ISC"
+}
+
