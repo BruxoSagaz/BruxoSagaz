@@ -1,20 +1,74 @@
-const { addonBuilder, serveHTTP } = require('stremio-addon-sdk');
+const { addonBuilder } = require("stremio-addon-sdk");
+const axios = require("axios");
+
+async function fetchFromAPI(url, params) {
+  try {
+    const response = await axios.get(url, { params });
+    return response.data;
+  } catch (error) {
+    console.error("API request error:", error);
+    throw error;
+  }
+}
+
+async function fetchPopularMoviesFromAPI() {
+  const params = {
+    api_key: "0ef29fb0af91a636aca0d30a7205b467",
+    language: "en-US",
+    page: 1,
+  };
+
+  const data = await fetchFromAPI(
+    "https://api.themoviedb.org/3/movie/popular",
+    params
+  );
+
+  return data.results;
+}
 
 const manifest = {
-  id: 'com.example.catalog',
-  version: '1.0.0',
-  name: 'Example Catalog Addon',
-  description: 'A simple catalog addon for Stremio',
-  catalogs: [],
-  resources: ['catalog'],
-  types: ['movie'],
+  id: "org.example.popularmovies",
+  version: "1.0.0",
+  name: "Popular Movies",
+  description: "Stremio addon to display popular movies",
+  resources: ["catalog"],
+  types: ["movie"],
+  catalogs: [
+    {
+      type: "movie",
+      id: "popularmovies",
+      name: "Popular Movies",
+      extra: [{ name: "search" }],
+    },
+  ],
+  idPrefixes: ["TT-"],
 };
 
 const builder = new addonBuilder(manifest);
 
 builder.defineCatalogHandler(args => {
-  return Promise.resolve({ metas: [] }); // You can populate this array with actual movie data
+  if (args.type === "movie" && args.id === "popularmovies") {
+    return fetchPopularMovies();
+  }
 });
 
+async function fetchPopularMovies() {
+  const movies = await fetchPopularMoviesFromAPI();
+  
+  return {
+    metas: movies.map(movie => ({
+      id: movie.id,
+      name: movie.title,
+      poster: movie.poster_path
+        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+        : "https://s2-gshow.glbimg.com/vFKI5GOm64yHXIFkeHKMRD7tAeg=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_e84042ef78cb4708aeebdf1c68c6cbd6/internal_photos/bs/2022/o/n/OAqK9ISwanJVTPazoN9g/filme-elvis.jpg",
+      description: movie.overview,
+      genres: movie.genre_ids.map(genreId => genreId.toString()),
+      releaseInfo: movie.release_date,
+    })),
+  };
+}
+
 const addonInterface = builder.getInterface();
-serveHTTP(addonInterface, { port: 7000 });
+
+module.exports = addonInterface;
