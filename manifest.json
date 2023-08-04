@@ -1,35 +1,6 @@
 const { addonBuilder } = require("stremio-addon-sdk");
 const axios = require("axios");
 
-async function fetchFromAPI(url, params) {
-  try {
-    const response = await axios.get(url, { params });
-    return response.data;
-  } catch (error) {
-    console.error("API request error:", error);
-    throw error;
-  }
-}
-
-async function fetchPopularMoviesFromAPI() {
-  const params = {
-    api_key: "
-  curl --request GET \
-     --url 'https://api.themoviedb.org/3/search/movie?query=Batman&callback=test' \
-     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZWYyOWZiMGFmOTFhNjM2YWNhMGQzMGE3MjA1YjQ2NyIsInN1YiI6IjY0Y2MyMzhlNGZkMTQxMDEyNzA5ZGVjOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Gw4fTu4rASPyGs5Lc3XgteyMwS9bWCIMSivd4M2FWec' \
-     --header 'accept: application/json'",
-    language: "en-US",
-    page: 1,
-  };
-
-  const data = await fetchFromAPI(
-    "https://api.themoviedb.org/3/movie/popular",
-    params
-  );
-
-  return data.results;
-}
-
 const manifest = {
   id: "org.example.popularmovies",
   version: "1.0.0",
@@ -50,6 +21,31 @@ const manifest = {
 
 const builder = new addonBuilder(manifest);
 
+async function fetchFromAPI(url, params) {
+  try {
+    const response = await axios.get(url, { params });
+    return response.data;
+  } catch (error) {
+    console.error("API request error:", error);
+    throw error;
+  }
+}
+
+async function fetchPopularMoviesFromAPI() {
+  const params = {
+    api_key: "0ef29fb0af91a636aca0d30a7205b467",
+    language: "en-US",
+    page: 1,
+  };
+
+  const data = await fetchFromAPI(
+    "https://api.themoviedb.org/3/movie/popular",
+    params
+  );
+
+  return data.results;
+}
+
 builder.defineCatalogHandler(args => {
   if (args.type === "movie" && args.id === "popularmovies") {
     return fetchPopularMovies();
@@ -58,7 +54,7 @@ builder.defineCatalogHandler(args => {
 
 async function fetchPopularMovies() {
   const movies = await fetchPopularMoviesFromAPI();
-  
+
   return {
     metas: movies.map(movie => ({
       id: movie.id,
@@ -73,6 +69,4 @@ async function fetchPopularMovies() {
   };
 }
 
-const addonInterface = builder.getInterface();
-
-module.exports = addonInterface;
+module.exports = builder.getInterface();
