@@ -13,7 +13,11 @@ async function fetchFromAPI(url, params) {
 
 async function fetchPopularMoviesFromAPI() {
   const params = {
-    api_key: "0ef29fb0af91a636aca0d30a7205b467",
+    api_key: "
+  curl --request GET \
+     --url 'https://api.themoviedb.org/3/search/movie?query=Batman&callback=test' \
+     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwZWYyOWZiMGFmOTFhNjM2YWNhMGQzMGE3MjA1YjQ2NyIsInN1YiI6IjY0Y2MyMzhlNGZkMTQxMDEyNzA5ZGVjOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Gw4fTu4rASPyGs5Lc3XgteyMwS9bWCIMSivd4M2FWec' \
+     --header 'accept: application/json'",
     language: "en-US",
     page: 1,
   };
